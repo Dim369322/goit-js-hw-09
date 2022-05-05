@@ -2,27 +2,23 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 // <----------------  1 часть  ----------------> 
 
-const firstDelay = document.querySelector('input[name="delay"]');
-const delayStep = document.querySelector('input[name="step"]');
-const amount = document.querySelector('input[name="amount"]');
-
 const form = {
   body: document.querySelector('.form'),
-  delay: 0,
-  step: 0,
-  amount: 0,
+  delay: document.querySelector('input[name="delay"]'),
+  step: document.querySelector('input[name="step"]'),
+  amount: document.querySelector('input[name="amount"]'),
 }
 
 form.body.addEventListener('submit', (e) => {
   e.preventDefault();
-  changeFormValue();
+  changeFormValue(e);
   startCreatePromise();
 });
 
-function changeFormValue() {
-  form.delay = Number(firstDelay.value);
-  form.step = Number(delayStep.value);
-  form.amount = Number(amount.value);
+function changeFormValue(e) {
+  form.delay = Number(e.currentTarget.elements.delay.value);
+  form.step = Number(e.currentTarget.elements.step.value);
+  form.amount = Number(e.currentTarget.elements.amount.value);
 }
 
 function startCreatePromise(){
@@ -49,18 +45,15 @@ function createPromises(position, delay) {
 
 // <----------------  2 часть  ----------------> 
 
-const delayOnce = document.querySelector('input[name="delay-second"]');
-const promiseNumber = document.querySelector('input[name="amount-second"]');
-
 const secondForm = {
   body: document.querySelector('.form-second'),
-  delay: 0,
-  amount: 0,
+  delay: document.querySelector('input[name="delayed"]'),
+  amount: document.querySelector('input[name="position"]'),
 }
 
 secondForm.body.addEventListener('submit', (e) => {
   e.preventDefault();
-  changeSecondFormValue();
+  changeSecondFormValue(e);
   createPromise(secondForm.amount, secondForm.delay)
   .then(({ position, delay }) => {
     Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
@@ -70,9 +63,9 @@ secondForm.body.addEventListener('submit', (e) => {
   });;
 });
 
-function changeSecondFormValue() {
-  secondForm.delay = Number(delayOnce.value);
-  secondForm.amount = Number(promiseNumber.value);
+function changeSecondFormValue(e) {
+  secondForm.delay = Number(e.currentTarget.elements.delayed.value);
+  secondForm.amount = Number(e.currentTarget.elements.position.value);
 }
 
 function createPromise(position, delay) {
@@ -89,26 +82,3 @@ function createPromise(position, delay) {
     }, delay );
   });
 }
-
-// function createPromise(delay, step) {
-//     return new Promise ((resolve, reject) => {
-//       const shouldResolve = Math.random() > 0.3;
-//       let amount = 0;
-
-//       let timeout = setTimeout(
-//       function check(delay) {
-//         delay += step;
-//         if (shouldResolve) {
-//           console.log(`✅ Fulfilled promise ${amount += 1}  in ${delay } ms`);
-//         } else {
-//          console.log(`❌ Rejected promise ${amount += 1} in ${delay } ms`);
-//        }
-//           timeout = setTimeout(check, delay, delay);
-//           if(form.amount === amount){
-//            clearTimeout(timeout);
-//           }
-//       },
-//       delay ,
-//       delay - step);
-//   });
-// }
